@@ -16,10 +16,10 @@ class ViewController: UIViewController {
         button.backgroundColor = .systemTeal
         button.setTitle("더하기", for: .normal)
         button.layer.cornerRadius = 20
-        button.addTarget(self, action: #selector(plus), for: .touchUpInside)
+        button.addTarget(self, action: #selector(plusButtonDidtap), for: .touchUpInside)
         return button
     }()
-    @objc func plus(){
+    @objc func plusButtonDidtap(){
         if let num1 = firstTextField.text,
            let num2 = secondTextField.text{
             if let a = Int(num1),
@@ -37,10 +37,10 @@ class ViewController: UIViewController {
        button.backgroundColor = .systemTeal
        button.setTitle("뺴기", for: .normal)
        button.layer.cornerRadius = 20
-       button.addTarget(self, action: #selector(minus), for: .touchUpInside)
+       button.addTarget(self, action: #selector(minusButtonDidtap), for: .touchUpInside)
        return button
    }()
-    @objc func minus(){
+    @objc func minusButtonDidtap(){
         if let num1 = firstTextField.text,
            let num2 = secondTextField.text{
             if let a = Int(num1),let b = Int(num2){
@@ -57,10 +57,10 @@ class ViewController: UIViewController {
         button.backgroundColor = .systemTeal
         button.setTitle("곱하기", for: .normal)
         button.layer.cornerRadius = 20
-        button.addTarget(self, action: #selector(mul), for: .touchUpInside)
+        button.addTarget(self, action: #selector(mulButtonDidtap), for: .touchUpInside)
         return button
     }()
-    @objc func mul(){
+    @objc func mulButtonDidtap(){
         if let num1 = firstTextField.text,
            let num2 = secondTextField.text{
             if let a = Int(num1),let b = Int(num2){
@@ -77,26 +77,34 @@ class ViewController: UIViewController {
        button.backgroundColor = .systemTeal
        button.setTitle("나누기", for: .normal)
        button.layer.cornerRadius = 20
-       button.addTarget(self, action: #selector(div), for: .touchUpInside)
+       button.addTarget(self, action: #selector(divButtonDidtap), for: .touchUpInside)
        return button
     }()
-    @objc func div(){
-        if let num1 = firstTextField.text,
-           let num2 = secondTextField.text{
-            if let a = Int(num1),
-               let b = Int(num2){
-                if b != 0{
-                    Display.text = "\(a) / \(b) = \(a/b)"
-                }else{
-                    Display.text = "0으로 나눌수 없습니다."
-                    Display.textColor = .gray
-                }
-            }else{
-                Display.text = "숫자만 입력해주세요."
-                Display.textColor = .black
+    enum ErrorMessage : String, Error{
+        case DivZero = "0으로 나눌수 없습니다."
+    }
+    @objc func divButtonDidtap()throws{
+        do{
+            guard let num1 = firstTextField.text,let num2 = secondTextField.text else{
+                return
             }
+            guard let a =  Int(num1),let b = Int(num2) else{
+                return
+            }
+            
+            if b != 0{
+                Display.text = "\(a) / \(b) = \(a/b)"}else{
+                    throw ErrorMessage.DivZero
+                }
+        }
+        catch ErrorMessage.DivZero{
+            Display.text = ErrorMessage.DivZero.rawValue
+            Display.textColor = .gray
+
         }
     }
+    
+    
    
     //텍스트 필드
     lazy var firstTextField : UITextField = {
@@ -157,38 +165,44 @@ class ViewController: UIViewController {
         
         //레이아웃
         plusButton.snp.makeConstraints{ (make) in
-            make.width.equalTo(300)
+            make.leading.equalTo(46)
+            make.trailing.equalTo(-47)
             make.height.equalTo(39)
             make.centerX.equalToSuperview()
             make.top.equalTo(320)
         }
         minButton.snp.makeConstraints{ (make) in
-            make.width.equalTo(300)
+            make.leading.equalTo(46)
+            make.trailing.equalTo(-47)
             make.height.equalTo(39)
             make.centerX.equalToSuperview()
             make.top.equalTo(plusButton.snp.bottom).offset(10)
             
         }
         mulButton.snp.makeConstraints{ (make) in
-            make.width.equalTo(300)
+            make.leading.equalTo(46)
+            make.trailing.equalTo(-47)
             make.height.equalTo(39)
             make.centerX.equalToSuperview()
             make.top.equalTo(minButton.snp.bottom).offset(10)
         }
         divButton.snp.makeConstraints{ (make) in
-            make.width.equalTo(300)
+            make.leading.equalTo(46)
+            make.trailing.equalTo(-47)
             make.height.equalTo(39)
             make.centerX.equalToSuperview()
             make.top.equalTo(mulButton.snp.bottom).offset(10)
         }
         firstTextField.snp.makeConstraints{(make) in
-            make.width.equalTo(300)
+            make.leading.equalTo(46)
+            make.trailing.equalTo(-47)
             make.height.equalTo(39)
             make.centerX.equalToSuperview()
             make.top.equalTo(157)
         }
         secondTextField.snp.makeConstraints{(make) in
-            make.width.equalTo(300)
+            make.leading.equalTo(46)
+            make.trailing.equalTo(-47)
             make.height.equalTo(39)
             make.centerX.equalToSuperview()
             make.top.equalTo(firstTextField.snp.bottom).offset(10)
